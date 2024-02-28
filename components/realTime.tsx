@@ -21,7 +21,7 @@ export default function RealTime() {
     const screenWidth = window.screen.width;
     const [currentTime, setCurrentTime] = useState(new Date().toLocaleDateString("en-In", dateOpt));
 
-    if (window.screen.width < 480) return <></>;
+    if (screenWidth < 480) return <></>;
 
     else if (screenWidth > 640) {
         dateOpt.hour = "2-digit";

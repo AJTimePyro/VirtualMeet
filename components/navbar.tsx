@@ -1,12 +1,4 @@
-import { Open_Sans } from "next/font/google";
 import RealTime from "./realTime";
-
-const openSans = Open_Sans(
-    {
-        weight : "600",
-        subsets : ["latin"]
-    }
-)
 
 export default function Navbar() {
     return (
