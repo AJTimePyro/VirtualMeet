@@ -18,33 +18,38 @@ const dateOpt : Intl.DateTimeFormatOptions = {
 };
 
 export default function RealTime() {
-    const screenWidth = window.screen.width;
     const [currentTime, setCurrentTime] = useState(new Date().toLocaleDateString("en-In", dateOpt));
-
-    if (screenWidth < 480) return <></>;
-
-    else if (screenWidth > 640) {
-        dateOpt.hour = "2-digit";
-        dateOpt.minute = "2-digit";
-        dateOpt.second = "2-digit";
-        dateOpt.hour12 = false;
-
-        useEffect(
-            () => {
-                const interval = setInterval(
-                    () => {
-                        setCurrentTime(new Date().toLocaleDateString("en-In", dateOpt))
-                    },
-                    1000
-                );
     
-                return () => clearInterval(interval)
-            },
-            []
-        );
-    }
+    useEffect(
+        () => {
+            const screenWidth = window.screen.width;
+            if (screenWidth < 480) setCurrentTime('');
+        
+            else if (screenWidth > 640) {
+                dateOpt.hour = "2-digit";
+                dateOpt.minute = "2-digit";
+                dateOpt.second = "2-digit";
+                dateOpt.hour12 = false;
+        
+            }
+        },
+        []
+    );
+        
+    if (currentTime === '') return <></>;
 
-
+    useEffect(
+        () => {
+            const interval = setInterval(
+                () => {
+                    setCurrentTime(new Date().toLocaleDateString("en-In", dateOpt))
+                },
+                1000
+            );
+            return () => clearInterval(interval)
+        },
+        []
+    );
 
     return (
         <div className="text-center">
