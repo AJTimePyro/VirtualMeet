@@ -1,0 +1,17 @@
+@keyframes SlideToRightWithFadeOut {
+    0% {
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+    25% {
+        opacity: .25;
+        transform: translateX(-25%);
+    }
+    50% {
+        transform: translateX(0);
+        opacity: .5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
