@@ -9,8 +9,8 @@ const openSans = Open_Sans(
 
 export default function NewMeetOrJoin() {
     return (
-        <div className="pl-5 pr-5 flex justify-center flex-col">
-            <div className="m-auto mb-4 md:mb-5" style={openSans.style}>
+        <div className="pl-5 pr-5 flex justify-center flex-col" style={openSans.style}>
+            <div className="m-auto mb-4 md:mb-5">
                 <button className="
                 bg-zinc-400
                 bg-opacity-30 hover:bg-opacity-25 max-sm:focus:bg-opacity-25
@@ -56,36 +56,52 @@ export default function NewMeetOrJoin() {
                 </span>
             </div>
 
-            <div className="m-auto relative">
-                <input
-                    name="JoinInput"
-                    type="text"
+            <div className="m-auto flex relative">
+                <div className="relative">
+                    <input
+                        name="JoinInput"
+                        type="text"
+                        className="
+                            bg-slate-300
+                            bg-opacity-40
+                            text-white
+                            py-5 px-4
+                            h-14 w-60
+                            rounded
+                            outline-none
+                            peer
+                            focus:pt-9
+                        "
+                        placeholder=" "
+                    />
+                    <label
+                        className="
+                            text-white text-opacity-75
+                            absolute
+                            top-4 left-4 -z-10
+                            peer-focus:scale-90
+                            peer-focus:top-1
+                            peer-focus:left-2
+                            transition-all duration-150
+                        "
+                        htmlFor="JoinInput">
+                        Enter Code to join
+                    </label>
+                </div>
+
+                <button
                     className="
-                        bg-slate-300
-                        bg-opacity-40
-                        text-white
-                        py-5 px-4
-                        h-14
-                        rounded
-                        outline-none
-                        peer
-                        focus:pt-9
+                    absolute
+                    right-0 top-0
+                    text-black
+                    text-base
+                    bg-[#a9faa2]
+                    p-4 pr-2
+                    rounded-s-full
                     "
-                    placeholder=" "
-                />
-                <label
-                    className="
-                        text-white text-opacity-75
-                        absolute
-                        top-4 left-4 -z-10
-                        peer-focus:scale-90
-                        peer-focus:top-1
-                        peer-focus:left-1
-                        transition-all duration-150
-                    "
-                    htmlFor="JoinInput">
-                    Enter Meeting Code to join
-                </label>
+                >
+                    Join
+                </button>
             </div>
         </div>
     )
