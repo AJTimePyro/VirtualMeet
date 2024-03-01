@@ -97,7 +97,7 @@ export default function NewMeetOrJoin() {
                     text-base
                     bg-[#a9faa2]
                     p-4 pr-2
-                    rounded-s-full
+                    rounded-s-3xl rounded-e
                     "
                 >
                     Join
