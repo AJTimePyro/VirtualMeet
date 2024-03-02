@@ -23,7 +23,7 @@ export default function NewMeetOrJoin() {
                 "
                 style={
                     {
-                        textShadow : "5px 5px 5px black"
+                        textShadow : "5px 5px 15px black"
                     }
                 }
                 >
@@ -98,6 +98,8 @@ export default function NewMeetOrJoin() {
                     bg-[#a9faa2]
                     p-4 pr-2
                     rounded-s-3xl rounded-e
+                    hover:bg-opacity-80
+                    transition-all duration-200
                     "
                 >
                     Join
