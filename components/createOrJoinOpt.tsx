@@ -1,4 +1,8 @@
+'use client'
+
 import { Open_Sans } from "next/font/google";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const openSans = Open_Sans(
     {
@@ -8,6 +12,13 @@ const openSans = Open_Sans(
 )
 
 export default function NewMeetOrJoin() {
+    const route = useRouter();
+
+    const createMeet = async () => {
+        const meetCode = await axios.get("/api/create-meet");
+        route.push("/meet/" + meetCode.data.uuid);
+    };
+
     return (
         <div className="pl-5 pr-5 flex justify-center flex-col" style={openSans.style}>
             <div className="m-auto mb-4 md:mb-5">
@@ -26,6 +37,7 @@ export default function NewMeetOrJoin() {
                         textShadow : "5px 5px 15px black"
                     }
                 }
+                onClick={createMeet}
                 >
                     Create New Meet
                 </button>
