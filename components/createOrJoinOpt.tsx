@@ -3,6 +3,7 @@
 import { Open_Sans } from "next/font/google";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const openSans = Open_Sans(
     {
@@ -13,11 +14,16 @@ const openSans = Open_Sans(
 
 export default function NewMeetOrJoin() {
     const route = useRouter();
+    const [meetID, setMeetID] = useState('');
 
     const createMeet = async () => {
         const meetCode = await axios.get("/api/create-meet");
         route.push("/meet/" + meetCode.data.uuid);
     };
+
+    const joinMeet = async () => {
+        //
+    }
 
     return (
         <div className="pl-5 pr-5 flex justify-center flex-col" style={openSans.style}>
@@ -85,6 +91,13 @@ export default function NewMeetOrJoin() {
                             focus:pt-9
                         "
                         placeholder=" "
+                        onChange={(event) => setMeetID(event.target.value)}
+                        value={meetID}
+                        onKeyDown={
+                            (event) => {
+                                if (event.key.toLowerCase() == 'enter') joinMeet()
+                            }
+                        }
                     />
                     <label
                         className="
@@ -113,6 +126,7 @@ export default function NewMeetOrJoin() {
                     hover:bg-opacity-80
                     transition-all duration-200
                     "
+                    onClick={joinMeet}
                 >
                     Join
                 </button>
