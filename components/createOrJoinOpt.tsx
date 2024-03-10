@@ -22,7 +22,9 @@ export default function NewMeetOrJoin() {
     };
 
     const joinMeet = async () => {
-        //
+        if (meetID) {
+            route.push("/meet/" + meetID);
+        }
     }
 
     return (
