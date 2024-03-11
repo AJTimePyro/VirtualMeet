@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import usePeer from "@/hook/usePeer";
 import useStream from "@/hook/useStream";
 import { useEffect, useRef } from "react";
-import { pusherClient, pusherServer } from "@/lib/pusher";
+import { pusherClient } from "@/lib/pusher";
 import axios from "axios";
 
 export default function MeetPage() {
@@ -15,25 +15,6 @@ export default function MeetPage() {
     const videoRef = useRef<null | HTMLVideoElement>(null);
     const myStream = useStream();
     const {peer, peerID} = usePeer();
-    
-    useEffect(
-        () => {
-            pusherClient.subscribe(meetID);
-
-            pusherClient.bind(
-                "new-user-joined",
-                (peerID : string) => {
-                    console.log("New user joined " + peerID);
-                }
-            )
-
-            return () => {
-                pusherClient.unbind("new-user-joined");
-                pusherClient.unsubscribe(meetID);
-            }
-        },
-        []
-    );
 
     useEffect(
         () => {
@@ -47,6 +28,21 @@ export default function MeetPage() {
                         }
                     );
                 })();
+            }
+
+            pusherClient.subscribe(meetID);
+            pusherClient.bind(
+                "new-user-joined",
+                (newUserPeerID : string) => {
+                    if (newUserPeerID != peerID) {
+                        console.log("New user joined " + newUserPeerID);
+                    }
+                }
+            )
+
+            return () => {
+                pusherClient.unbind("new-user-joined");
+                pusherClient.unsubscribe(meetID);
             }
         },
         [peer, peerID]
