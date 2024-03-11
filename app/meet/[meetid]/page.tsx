@@ -13,40 +13,77 @@ export default function MeetPage() {
     if (Array.isArray(meetID)) return;
 
     const videoRef = useRef<null | HTMLVideoElement>(null);
+    const videoRef2 = useRef<null | HTMLVideoElement>(null);
     const myStream = useStream();
     const {peer, peerID} = usePeer();
 
     useEffect(
         () => {
-            if (peerID) {
-                (async () => {
-                    await axios.post(
-                        "/api/new-user",
-                        {
-                            meetID,
-                            peerID
-                        }
-                    );
-                })();
-            }
+            if (!peer || !peerID || !myStream) return;
 
+            (async () => {
+                await axios.post(
+                    "/api/new-user",
+                    {
+                        meetID,
+                        peerID
+                    }
+                );
+            })();
+    
             pusherClient.subscribe(meetID);
             pusherClient.bind(
                 "new-user-joined",
                 (newUserPeerID : string) => {
-                    if (newUserPeerID != peerID) {
+    
+                    if (peerID != newUserPeerID) {
                         console.log("New user joined " + newUserPeerID);
+    
+                        const call = peer.call(
+                            newUserPeerID,
+                            myStream
+                        );
+
+                        call.on(
+                            "stream",
+                            (stream) => {
+                                console.log("incoming stream from " + call.peer);
+                                videoRef2.current!.srcObject = stream;
+                            }
+                        );
                     }
                 }
             )
-
+    
             return () => {
                 pusherClient.unbind("new-user-joined");
                 pusherClient.unsubscribe(meetID);
             }
         },
-        [peer, peerID]
+        [peer, peerID, myStream]
     );
+
+    useEffect(
+        () => {
+            if (!peer || !myStream) return;
+
+            peer.on(
+                "call",
+                (call) => {
+                    call.answer(myStream);
+                    
+                    call.on(
+                        "stream",
+                        (stream) => {
+                            console.log("incoming stream from " + call.peer);
+                            videoRef2.current!.srcObject = stream;
+                        }
+                    );
+                }
+            );
+        },
+        [peer, myStream]
+    )
 
     useEffect(
         () => {
@@ -60,6 +97,7 @@ export default function MeetPage() {
     return (
         <div>
             <video ref={videoRef} autoPlay={true} muted={true}/>
+            <video ref={videoRef2} autoPlay={true} muted={true}/>
         </div>
     )
 }
