@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 export async function POST(req : NextRequest) {
     const {meetID, peerID} = await req.json();
-    pusherServer.trigger(
+    await pusherServer.trigger(
         meetID,
         "new-user-joined",
         peerID
