@@ -10,8 +10,8 @@ import VideoStream from "@/components/videoStreamer";
 
 export default function MeetPage() {
     const params = useParams();
-    const meetID = params.meetid;
-    if (Array.isArray(meetID)) return;
+    const meetParam = params.meetid;
+    const meetID = Array.isArray(meetParam) ? meetParam.at(0)! : meetParam;
 
     const myStream = useStream();
     const {peer, peerID} = usePeer();
@@ -65,7 +65,7 @@ export default function MeetPage() {
                 peer.off("call");
             }
         },
-        [peerID]
+        [peerID, myStream]
     );
 
     useEffect(
