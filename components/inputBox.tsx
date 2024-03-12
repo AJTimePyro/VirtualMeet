@@ -29,11 +29,12 @@ export default function InputHandler(
                     bg-slate-300
                     bg-opacity-40
                     text-white
-                    py-5 px-4
+                    pb-5 pt-9 px-4
                     h-14 w-60
                     rounded
                     outline-none
                     peer
+                    placeholder-shown:pt-5
                     focus:pt-9
                 "
                 onKeyDown={keyDownHandler}
@@ -41,7 +42,11 @@ export default function InputHandler(
             <label
                 className="text-white text-opacity-75
                 absolute
-                top-4 left-4 -z-10
+                top-1 left-2 -z-10 
+                scale-90
+                peer-placeholder-shown:top-4
+                peer-placeholder-shown:left-4
+                peer-placeholder-shown:scale-100
                 peer-focus:scale-90
                 peer-focus:top-1
                 peer-focus:left-2
