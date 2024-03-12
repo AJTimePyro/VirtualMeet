@@ -3,10 +3,11 @@
 import { useParams } from "next/navigation";
 import usePeer from "@/hook/usePeer";
 import useStream from "@/hook/useStream";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
 import axios from "axios";
 import VideoStream from "@/components/videoStreamer";
+import InputHandler from "@/components/inputBox";
 
 export default function MeetPage() {
     const params = useParams();
@@ -16,6 +17,8 @@ export default function MeetPage() {
     const myStream = useStream();
     const {peer, peerID} = usePeer();
     const [streamArray, setStreamArray] = useState<Array<MediaStream | null>>([]);
+    const [username, setUsername] = useState('');
+    const [isUserNameSet, updateIsUserNameSet] = useState(false);
 
     const streamHandler = (stream : MediaStream) => {
         setStreamArray(
@@ -80,6 +83,27 @@ export default function MeetPage() {
     )
 
     return (
+        !isUserNameSet ?
+        <div className="w-full my-20">
+            <div className="flex justify-center relative">
+                <InputHandler
+                    inputValue={username}
+                    labelText="Enter your name"
+                    inputName="nameInput"
+                    onChangeFn={
+                        (event : ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
+                    }
+                    keyDownHandler={
+                        (event) => {
+                            if (event.key.toLowerCase() == "enter") {
+                                updateIsUserNameSet(true);
+                            }
+                        }
+                    }
+                />
+            </div>
+        </div> :
+
         <div>
             {
                 streamArray.map(

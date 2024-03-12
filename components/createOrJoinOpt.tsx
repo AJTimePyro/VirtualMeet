@@ -3,7 +3,8 @@
 import { Open_Sans } from "next/font/google";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+import InputHandler from "./inputBox";
 
 const openSans = Open_Sans(
     {
@@ -77,44 +78,19 @@ export default function NewMeetOrJoin() {
             </div>
 
             <div className="m-auto flex relative">
-                <div className="relative">
-                    <input
-                        name="JoinInput"
-                        type="text"
-                        className="
-                            bg-slate-300
-                            bg-opacity-40
-                            text-white
-                            py-5 px-4
-                            h-14 w-60
-                            rounded
-                            outline-none
-                            peer
-                            focus:pt-9
-                        "
-                        placeholder=" "
-                        onChange={(event) => setMeetID(event.target.value)}
-                        value={meetID}
-                        onKeyDown={
-                            (event) => {
-                                if (event.key.toLowerCase() == 'enter') joinMeet()
-                            }
+                <InputHandler
+                    inputValue={meetID}
+                    labelText="Enter Code to join"
+                    inputName="JoinInput"
+                    onChangeFn={
+                        (event : ChangeEvent<HTMLInputElement>) => setMeetID(event.target.value)
+                    }
+                    keyDownHandler={
+                        (event) => {
+                            if (event.key.toLowerCase() == 'enter') joinMeet()
                         }
-                    />
-                    <label
-                        className="
-                            text-white text-opacity-75
-                            absolute
-                            top-4 left-4 -z-10
-                            peer-focus:scale-90
-                            peer-focus:top-1
-                            peer-focus:left-2
-                            transition-all duration-150
-                        "
-                        htmlFor="JoinInput">
-                        Enter Code to join
-                    </label>
-                </div>
+                    }
+                />
 
                 <button
                     className="
