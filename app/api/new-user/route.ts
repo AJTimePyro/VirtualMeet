@@ -9,5 +9,10 @@ export async function POST(req : NextRequest) {
         peerID
     );
 
-    return new Response();
+    return new Response(
+        null,
+        {
+            status : 200
+        }
+    );
 }

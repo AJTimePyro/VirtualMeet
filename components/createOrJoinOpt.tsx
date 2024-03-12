@@ -17,7 +17,7 @@ export default function NewMeetOrJoin() {
     const [meetID, setMeetID] = useState('');
 
     const createMeet = async () => {
-        const meetCode = await axios.get("/api/create-meet");
+        const meetCode = await axios.post("/api/create-meet");
         route.push("/meet/" + meetCode.data.uuid);
     };
 
