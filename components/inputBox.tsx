@@ -5,7 +5,8 @@ interface InputProps {
     onChangeFn : ChangeEventHandler,
     labelText : string,
     inputName : string,
-    keyDownHandler? : KeyboardEventHandler
+    keyDownHandler : KeyboardEventHandler,
+    paddingRight? : number
 };
 
 export default function InputHandler(
@@ -14,7 +15,8 @@ export default function InputHandler(
         onChangeFn,
         labelText,
         inputName,
-        keyDownHandler
+        keyDownHandler,
+        paddingRight = 16
     } : InputProps
 ) {
     return (
@@ -37,6 +39,11 @@ export default function InputHandler(
                     placeholder-shown:pt-5
                     focus:pt-9
                 "
+                style={
+                    {
+                        paddingRight : paddingRight
+                    }
+                }
                 onKeyDown={keyDownHandler}
             />
             <label

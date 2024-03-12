@@ -82,6 +82,7 @@ export default function NewMeetOrJoin() {
                     inputValue={meetID}
                     labelText="Enter Code to join"
                     inputName="JoinInput"
+                    paddingRight={56}
                     onChangeFn={
                         (event : ChangeEvent<HTMLInputElement>) => setMeetID(event.target.value)
                     }
@@ -95,7 +96,7 @@ export default function NewMeetOrJoin() {
                 <button
                     className="
                     absolute
-                    right-0 top-0
+                    right-0 top-0 z-10
                     text-black
                     text-base
                     bg-[#a9faa2]
