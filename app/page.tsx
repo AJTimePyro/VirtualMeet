@@ -12,9 +12,7 @@ const roboto = Roboto(
 
 export default function Home() {
   return (
-    <main>
-      <Navbar/>
-      
+    <main>      
       <section className="mt-10 sm:mt-16 md:mt-20">
         <div
           className="pl-5 pr-5 select-none mb-10 sm:mb-16 md:mb-20 opacity-100 transition-opacity"
