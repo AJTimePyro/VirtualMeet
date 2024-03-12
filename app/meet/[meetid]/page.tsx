@@ -16,7 +16,6 @@ export default function MeetPage() {
     const myStream = useStream();
     const {peer, peerID} = usePeer();
     const [streamArray, setStreamArray] = useState<Array<MediaStream | null>>([]);
-    const [username, setUsername] = useState('');
 
     const streamHandler = (stream : MediaStream) => {
         setStreamArray(
@@ -81,31 +80,6 @@ export default function MeetPage() {
     )
 
     return (
-        !username ?
-        <div className="w-full">
-            <div className="flex justify-center">
-                <div className="relative">
-                    <input
-                        name="nameInput"
-                        type="text"
-                        value={username}
-                        onChange={
-                            (event) => setUsername(event.target.value)
-                        }
-                        placeholder=' '
-                        className=""
-                    />
-                    <label
-                        className="
-                            absoulte top-0 left-0"
-                        htmlFor="nameInput"
-                    >
-                        Enter Name
-                    </label>
-                </div>
-            </div>
-        </div> :
-
         <div>
             {
                 streamArray.map(
