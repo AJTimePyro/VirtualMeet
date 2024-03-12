@@ -3,11 +3,12 @@
 import { useParams } from "next/navigation";
 import usePeer from "@/hook/usePeer";
 import useStream from "@/hook/useStream";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
 import axios from "axios";
 import VideoStream from "@/components/videoStreamer";
 import InputHandler from "@/components/inputBox";
+import { type UserStreamData } from "@/interfaces/StreamInterface";
 
 export default function MeetPage() {
     const params = useParams();
@@ -16,13 +17,17 @@ export default function MeetPage() {
 
     const myStream = useStream();
     const {peer, peerID} = usePeer();
-    const [streamArray, setStreamArray] = useState<Array<MediaStream | null>>([]);
+    const [streamArray, setStreamArray] = useState<Array<UserStreamData>>([]);
     const [username, setUsername] = useState('');
     const [isUserNameSet, updateIsUserNameSet] = useState(false);
 
     const streamHandler = (stream : MediaStream) => {
         setStreamArray(
-            prevState => [...prevState, stream]
+            prevState => [...prevState, {
+                stream : stream,
+                username : username,
+                streamID : stream.id
+            }]
         );
     }
 
@@ -75,7 +80,11 @@ export default function MeetPage() {
         () => {
             if (myStream) {
                 setStreamArray(
-                    prevState => [...prevState, myStream]
+                    prevState => [...prevState, {
+                        stream : myStream,
+                        username : username,
+                        streamID : myStream.id
+                    }]
                 );
             }
         },
@@ -107,8 +116,11 @@ export default function MeetPage() {
         <div>
             {
                 streamArray.map(
-                    (stream) => {
-                        return <VideoStream key={stream?.id} stream={stream}/>;
+                    (streamData) => {
+                        return <VideoStream
+                            key={streamData.streamID}
+                            streamData={streamData}
+                        />;
                     }
                 )
             }

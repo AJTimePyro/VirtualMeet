@@ -1,15 +1,20 @@
+import { type UserStreamData } from "@/interfaces/StreamInterface";
 import { useEffect, useRef } from "react";
+
+interface VideoStreamProps {
+    streamData : UserStreamData
+};
 
 export default function VideoStream(
     {
-        stream
-    } : { stream : MediaStream | null }
+        streamData
+    } : VideoStreamProps
 ) {
 
     const videoRef = useRef<null | HTMLVideoElement>(null);
     useEffect(
         () => {
-            videoRef.current!.srcObject = stream;
+            videoRef.current!.srcObject = streamData.stream;
         },
         []
     );
@@ -23,8 +28,8 @@ export default function VideoStream(
             />
 
             <span>
-                {stream?.id}
+                {streamData?.username}
             </span>
         </div>
-    )
+    );
 }
