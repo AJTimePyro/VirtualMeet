@@ -6,7 +6,7 @@ export default function Navbar() {
             <div>
                 <img
                     className="w-48 h-16 object-cover object-center"
-                    src="web-logo.png"
+                    src="/web-logo.png"
                     alt="Virtual Meet Logo"
                 />
             </div>
