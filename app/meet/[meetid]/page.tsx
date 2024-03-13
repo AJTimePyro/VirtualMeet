@@ -23,7 +23,6 @@ export default function MeetPage() {
     const receivedUsername = useRef('');
 
     const streamHandler = (stream : MediaStream) => {
-        console.log(receivedUsername.current);
         setStreamArray(
             prevState => [...prevState, {
                 stream : stream,
@@ -102,8 +101,8 @@ export default function MeetPage() {
     );
 
     const userNameHandler = () => {
-        if (username) updateIsUserNameSet(true);
-    }
+        if (username && !isUserNameSet) updateIsUserNameSet(true);
+    };
 
     return (
         !isUserNameSet ?
@@ -132,7 +131,7 @@ export default function MeetPage() {
             </div>
         </section> :
 
-        <section className="flex">
+        <section className="flex flex-wrap gap-2 md:gap-8 justify-center mt-8 mx-4">
             {
                 streamArray.map(
                     (streamData) => {
