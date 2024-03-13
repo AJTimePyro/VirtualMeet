@@ -83,18 +83,19 @@ export default function NewMeetOrJoin() {
                     labelText="Enter Code to join"
                     inputName="JoinInput"
                     paddingRight={56}
+                    fieldName="Meet Code"
                     onChangeFn={
                         (event : ChangeEvent<HTMLInputElement>) => setMeetID(event.target.value)
                     }
                     keyDownHandler={
                         (event) => {
-                            if (event.key.toLowerCase() == 'enter') joinMeet()
+                            if (event.key.toLowerCase() == 'enter') joinMeet();
                         }
                     }
                 />
 
                 <button
-                    className="
+                    className={`
                     absolute
                     right-0 top-0 z-10
                     text-black
@@ -104,7 +105,8 @@ export default function NewMeetOrJoin() {
                     rounded-s-3xl rounded-e
                     hover:bg-opacity-80
                     transition-all duration-200
-                    "
+                    ${meetID ? "cursor-pointer" : "cursor-not-allowed"}
+                    `}
                     onClick={joinMeet}
                 >
                     Join

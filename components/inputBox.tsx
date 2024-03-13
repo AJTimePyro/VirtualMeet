@@ -1,4 +1,5 @@
-import { ChangeEventHandler, KeyboardEventHandler } from "react";
+import { ChangeEventHandler, KeyboardEventHandler, useState } from "react";
+import { PiWarningCircle } from "react-icons/pi";
 
 interface InputProps {
     inputValue : string,
@@ -6,7 +7,8 @@ interface InputProps {
     labelText : string,
     inputName : string,
     keyDownHandler : KeyboardEventHandler,
-    paddingRight? : number
+    paddingRight? : number,
+    fieldName : string
 };
 
 export default function InputHandler(
@@ -16,16 +18,29 @@ export default function InputHandler(
         labelText,
         inputName,
         keyDownHandler,
+        fieldName,
         paddingRight = 16
     } : InputProps
 ) {
+    const [isFormEmpty, updateFormEmpty] = useState(false);
+    const customFormUpdate = (dependency : string) => {
+        updateFormEmpty(dependency ? false : true);
+    }
+    const formEmptyHandler = () => customFormUpdate(inputValue);
+
     return (
         <div className="relative">
             <input
+                onBlur={formEmptyHandler}
                 name={inputName}
                 type="text"
                 value={inputValue}
-                onChange={onChangeFn}
+                onChange={
+                    (event) => {
+                        customFormUpdate(event.target.value);
+                        onChangeFn(event);
+                    }
+                }
                 placeholder=' '
                 className="
                     bg-slate-300
@@ -62,6 +77,16 @@ export default function InputHandler(
             >
                 {labelText}
             </label>
+
+            {
+                isFormEmpty &&
+                <div className="flex items-center text-red-500 select-none">
+                    <PiWarningCircle size={20} className="mr-1"/>
+                    <span className="">
+                        {fieldName} can't be empty
+                    </span>
+                </div>
+            }
         </div>
     );
 };

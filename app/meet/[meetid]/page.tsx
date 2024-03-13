@@ -91,25 +91,34 @@ export default function MeetPage() {
         [myStream]
     )
 
+    const userNameHandler = () => {
+        if (username) updateIsUserNameSet(true);
+    }
+
     return (
         !isUserNameSet ?
-        <div className="w-full my-20">
-            <div className="flex justify-center relative">
+        <div className="w-full my-14 flex justify-center flex-col">
+            <div className="flex justify-center relative my-6">
                 <InputHandler
                     inputValue={username}
                     labelText="Enter your name"
                     inputName="nameInput"
+                    fieldName="Name"
                     onChangeFn={
                         (event : ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
                     }
                     keyDownHandler={
                         (event) => {
-                            if (event.key.toLowerCase() == "enter") {
-                                updateIsUserNameSet(true);
-                            }
+                            if (event.key.toLowerCase() == "enter") userNameHandler();
                         }
                     }
                 />
+            </div>
+
+            <div className="m-auto">
+                <button className={`bg-[#a9faa2] p-4 rounded hover:bg-opacity-90 transition-all duration-150 ${username ? "cursor-pointer" : "cursor-not-allowed"}`} onClick={userNameHandler}>
+                    Enter the meet
+                </button>
             </div>
         </div> :
 
