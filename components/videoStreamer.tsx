@@ -20,14 +20,15 @@ export default function VideoStream(
     );
 
     return (
-        <div>
+        <div className="flex flex-col justify-center">
             <video
                 ref={videoRef}
                 autoPlay={true}
                 muted={true}
+                disablePictureInPicture={true}
             />
 
-            <span>
+            <span className="text-white text-center">
                 {streamData?.username}
             </span>
         </div>

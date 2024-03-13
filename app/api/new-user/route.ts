@@ -2,11 +2,13 @@ import { pusherServer } from "@/lib/pusher";
 import { NextRequest } from "next/server";
 
 export async function POST(req : NextRequest) {
-    const {meetID, peerID} = await req.json();
+    const {meetID, peerID, username} = await req.json();
     await pusherServer.trigger(
         meetID,
-        "new-user-joined",
-        peerID
+        "new-user-joined",{
+            newUserPeerID : peerID,
+            userName : username
+        }
     );
 
     return new Response(

@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import usePeer from "@/hook/usePeer";
 import useStream from "@/hook/useStream";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
 import axios from "axios";
 import VideoStream from "@/components/videoStreamer";
@@ -20,12 +20,14 @@ export default function MeetPage() {
     const [streamArray, setStreamArray] = useState<Array<UserStreamData>>([]);
     const [username, setUsername] = useState('');
     const [isUserNameSet, updateIsUserNameSet] = useState(false);
+    const receivedUsername = useRef('');
 
     const streamHandler = (stream : MediaStream) => {
+        console.log(receivedUsername.current);
         setStreamArray(
             prevState => [...prevState, {
                 stream : stream,
-                username : username,
+                username : receivedUsername.current,
                 streamID : stream.id
             }]
         );
@@ -33,20 +35,22 @@ export default function MeetPage() {
 
     useEffect(
         () => {
-            if (!peer || !peerID || !myStream) return;
+            if (!peer || !peerID || !myStream || !isUserNameSet) return;
 
             (async () => {
                 await axios.post(
                     "/api/new-user",
                     {
                         meetID,
-                        peerID
+                        peerID,
+                        username
                     }
                 );
             })();
 
             peer.on(
                 "call", (call) => {
+                    receivedUsername.current = call.metadata.username;
                     call.answer(myStream);
                     call.once("stream", streamHandler);
                 }
@@ -55,12 +59,18 @@ export default function MeetPage() {
             pusherClient.subscribe(meetID);
             pusherClient.bind(
                 "new-user-joined",
-                (newUserPeerID : string) => {
-    
+                (data : {newUserPeerID : string, userName : string}) => {
+                    const { newUserPeerID, userName } = data;
                     if (peerID != newUserPeerID) {
+                        receivedUsername.current = userName;
                         const call = peer.call(
                             newUserPeerID,
-                            myStream
+                            myStream,
+                            {
+                                metadata : {
+                                    username : username
+                                }
+                            }
                         );
                         call.once("stream", streamHandler);
                     }
@@ -73,12 +83,12 @@ export default function MeetPage() {
                 peer.off("call");
             }
         },
-        [peerID, myStream]
+        [peerID, myStream, isUserNameSet]
     );
 
     useEffect(
         () => {
-            if (myStream) {
+            if (myStream && username) {
                 setStreamArray(
                     prevState => [...prevState, {
                         stream : myStream,
@@ -88,8 +98,8 @@ export default function MeetPage() {
                 );
             }
         },
-        [myStream]
-    )
+        [myStream, isUserNameSet]
+    );
 
     const userNameHandler = () => {
         if (username) updateIsUserNameSet(true);
@@ -97,7 +107,7 @@ export default function MeetPage() {
 
     return (
         !isUserNameSet ?
-        <div className="w-full my-14 flex justify-center flex-col">
+        <section className="w-full my-14 flex justify-center flex-col">
             <div className="flex justify-center relative my-6">
                 <InputHandler
                     inputValue={username}
@@ -120,9 +130,9 @@ export default function MeetPage() {
                     Enter the meet
                 </button>
             </div>
-        </div> :
+        </section> :
 
-        <div>
+        <section className="flex">
             {
                 streamArray.map(
                     (streamData) => {
@@ -133,6 +143,6 @@ export default function MeetPage() {
                     }
                 )
             }
-        </div>
+        </section>
     )
 }
