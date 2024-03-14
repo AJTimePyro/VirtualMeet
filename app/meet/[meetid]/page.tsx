@@ -133,6 +133,21 @@ export default function MeetPage() {
                     )
                 }
             );
+
+            pusherClient.bind(
+                "leaving-meet",
+                (requestedStreamID : string) => {
+                    setStreamArray(
+                        (prevState) => [
+                            ...(() => {
+                                return prevState.filter(
+                                    item => item.streamID !== requestedStreamID
+                                );
+                            })()
+                        ]
+                    )
+                }
+            )
     
             return () => {
                 pusherClient.unbind("new-user-joined");
@@ -201,6 +216,22 @@ export default function MeetPage() {
         );
     }
 
+    const leaveHandler = () => {
+        if (!(myStream instanceof MediaStream)) return;
+
+        (async () => await axios.post(
+            "/api/leave-meet", {
+                meetID : meetID,
+                requestedStreamID : myStream.id
+            }
+        ))();
+    }
+
+    const leaveMeet = () => {
+        leaveHandler();
+        route.push('/');
+    }
+
     const userNameHandler = () => {
         if (username && !isUserNameSet && myStream instanceof MediaStream) updateIsUserNameSet(true);
     };
@@ -266,7 +297,7 @@ export default function MeetPage() {
                     }
                 </div>
 
-                <div className="rounded-full text-white p-3 cursor-pointer bg-red-600 shadow-[0_5px_15px_rgba(0,0,0)] hover:shadow-[0_10px_15px_rgba(0,0,0)] transition-all duration-150 hover:bg-red-700">
+                <div onClick={leaveMeet} className="rounded-full text-white p-3 cursor-pointer bg-red-600 shadow-[0_5px_15px_rgba(0,0,0)] hover:shadow-[0_10px_15px_rgba(0,0,0)] transition-all duration-150 hover:bg-red-700">
                     <MdCallEnd size={30}/>
                 </div>
             </div>
