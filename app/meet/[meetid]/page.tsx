@@ -11,6 +11,9 @@ import InputHandler from "@/components/inputBox";
 import { type UserStreamData } from "@/interfaces/StreamInterface";
 import { ReactNotifications, Store } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
+import { MdCallEnd } from "react-icons/md";
+import { FaVideo, FaVideoSlash } from "react-icons/fa6";
+import { IoMdMic, IoMdMicOff } from "react-icons/io";
 
 export default function MeetPage() {
     const params = useParams();
@@ -22,6 +25,8 @@ export default function MeetPage() {
     const [streamArray, setStreamArray] = useState<Array<UserStreamData>>([]);
     const [username, setUsername] = useState('');
     const [isUserNameSet, updateIsUserNameSet] = useState(false);
+    const [micOn, setMicOn] = useState(true);
+    const [cameraOn, setCameraOn] = useState(true);
     const receivedUsername = useRef('');
     const route = useRouter();
 
@@ -158,17 +163,49 @@ export default function MeetPage() {
             <ReactNotifications/>
         </section> :
 
-        <section className="flex flex-wrap gap-2 md:gap-8 justify-center mt-8 mx-4">
-            {
-                streamArray.map(
-                    (streamData) => {
-                        return <VideoStream
-                            key={streamData.streamID}
-                            streamData={streamData}
-                        />;
+        <section className="flex">
+            <div className="flex flex-wrap gap-2 md:gap-8 justify-center my-8 mx-4 mb-20">
+                {
+                    streamArray.map(
+                        (streamData) => {
+                            return <VideoStream
+                                key={streamData.streamID}
+                                streamData={streamData}
+                            />;
+                        }
+                    )
+                }
+            </div>
+
+            <div className="fixed bottom-0 flex justify-around w-full bg-zinc-700 bg-opacity-50 p-4">
+                <div
+                    onClick={
+                        () => setMicOn(
+                            (prevValue) => !prevValue
+                        )
                     }
-                )
-            }
+                    className="rounded-full bg-white p-3 cursor-pointer text-blue-500">
+                    {
+                        micOn ? <IoMdMic size={30}/> : <IoMdMicOff size={30}/>
+                    }
+                </div>
+                
+                <div
+                    onClick={
+                        () => setCameraOn(
+                            (prevValue) => !prevValue
+                        )
+                    }
+                    className="rounded-full bg-white p-3 cursor-pointer text-gray-600">
+                    {
+                        cameraOn ? <FaVideo size={30}/> : <FaVideoSlash size={30}/>
+                    }
+                </div>
+
+                <div className="rounded-full bg-white p-3 cursor-pointer text-red-600">
+                    <MdCallEnd size={30}/>
+                </div>
+            </div>
         </section>
     )
 }
