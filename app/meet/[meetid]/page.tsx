@@ -246,7 +246,9 @@ export default function MeetPage() {
                     inputName="nameInput"
                     fieldName="Name"
                     onChangeFn={
-                        (event : ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
+                        (event : ChangeEvent<HTMLInputElement>) => {
+                            setUsername(event.target.value);
+                        }
                     }
                     keyDownHandler={
                         (event) => {
@@ -282,7 +284,7 @@ export default function MeetPage() {
             <div className="fixed bottom-0 flex justify-around w-full bg-zinc-700 bg-opacity-50 p-4">
                 <div
                     onClick={audioToggle}
-                    className={`rounded-full bg-white p-3 cursor-pointer text-blue-500 shadow-[0_5px_15px_rgba(0,0,0)] hover:shadow-[0_10px_15px_rgba(0,0,0)] transition-all duration-300 ${micOn ? '' : "bg-blue-500 text-white"}`}
+                    className={`rounded-full bg-white p-3 cursor-pointer text-blue-500 shadow-[0_5px_15px_rgba(0,0,0)] hover:shadow-[0_10px_15px_rgba(0,0,0)] transition-all duration-300 ${micOn ? '' : "bg-blue-600 text-white"}`}
                 >
                     {
                         micOn ? <IoMdMic size={30}/> : <IoMdMicOff size={30}/>
