@@ -158,7 +158,8 @@ export default function MeetPage() {
                         stream : myStream,
                         username : username,
                         streamID : myStream.id,
-                        mute : true
+                        mute : true,
+                        self : true
                     }]
                 );
             }

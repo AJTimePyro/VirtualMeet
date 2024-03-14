@@ -3,5 +3,6 @@ export interface UserStreamData {
     username : string,
     streamID : string,
     mute? : boolean,
-    videoOff? : boolean
+    videoOff? : boolean,
+    self? : boolean
 };
