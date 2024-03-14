@@ -97,6 +97,25 @@ export default function MeetPage() {
                     }
                 }
             )
+
+            pusherClient.bind(
+                "audio-toggle",
+                (data : {newState : boolean, requestedStreamID : string}) => {
+                    const { newState, requestedStreamID } = data;
+
+                    if (requestedStreamID === myStream.id) return;
+                    setStreamArray(
+                        (prevState) => [
+                            ...(() => {
+                                prevState.find(
+                                    (value) => value.streamID === requestedStreamID
+                                )!.mute = newState;
+                                return prevState;
+                            })()
+                        ]
+                    )
+                }
+            )
     
             return () => {
                 pusherClient.unbind("new-user-joined");
@@ -129,6 +148,22 @@ export default function MeetPage() {
         },
         [myStream, isUserNameSet]
     );
+
+    const audioToggle = () => {
+        if (!(myStream instanceof MediaStream)) return;
+
+        (async () => await axios.post(
+            "/api/audio-toggle", {
+                meetID : meetID,
+                newState : micOn,
+                requestedStreamID : myStream.id
+            }
+        ))();
+
+        setMicOn(
+            (prevValue) => !prevValue
+        );
+    }
 
     const userNameHandler = () => {
         if (username && !isUserNameSet && myStream instanceof MediaStream) updateIsUserNameSet(true);
@@ -179,11 +214,7 @@ export default function MeetPage() {
 
             <div className="fixed bottom-0 flex justify-around w-full bg-zinc-700 bg-opacity-50 p-4">
                 <div
-                    onClick={
-                        () => setMicOn(
-                            (prevValue) => !prevValue
-                        )
-                    }
+                    onClick={audioToggle}
                     className="rounded-full bg-white p-3 cursor-pointer text-blue-500">
                     {
                         micOn ? <IoMdMic size={30}/> : <IoMdMicOff size={30}/>
