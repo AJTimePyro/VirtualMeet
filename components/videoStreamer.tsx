@@ -41,7 +41,7 @@ export default function VideoStream(
                 
                 {
                     streamData.self || (streamData.mute &&
-                    <IoMdMicOff size={25} className="absolute top-4 right-4"/>)
+                    <IoMdMicOff size={25} className="absolute top-4 right-4 text-red-700"/>)
                 }
             </div>
 

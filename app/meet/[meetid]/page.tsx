@@ -251,7 +251,8 @@ export default function MeetPage() {
             <div className="fixed bottom-0 flex justify-around w-full bg-zinc-700 bg-opacity-50 p-4">
                 <div
                     onClick={audioToggle}
-                    className="rounded-full bg-white p-3 cursor-pointer text-blue-500">
+                    className={`rounded-full bg-white p-3 cursor-pointer text-blue-500 shadow-[0_5px_15px_rgba(0,0,0)] hover:shadow-[0_10px_15px_rgba(0,0,0)] transition-all duration-300 ${micOn ? '' : "bg-blue-500 text-white"}`}
+                >
                     {
                         micOn ? <IoMdMic size={30}/> : <IoMdMicOff size={30}/>
                     }
@@ -259,13 +260,13 @@ export default function MeetPage() {
                 
                 <div
                     onClick={videoToggle}
-                    className="rounded-full bg-white p-3 cursor-pointer text-gray-600">
+                    className={`rounded-full bg-white p-3 cursor-pointer text-gray-600 shadow-[0_5px_15px_rgba(0,0,0)] hover:shadow-[0_10px_15px_rgba(0,0,0)] transition-all duration-300 ${cameraOn ? '' : "bg-gray-600 text-white"}`}>
                     {
                         cameraOn ? <FaVideo size={30}/> : <FaVideoSlash size={30}/>
                     }
                 </div>
 
-                <div className="rounded-full bg-white p-3 cursor-pointer text-red-600">
+                <div className="rounded-full text-white p-3 cursor-pointer bg-red-600 shadow-[0_5px_15px_rgba(0,0,0)] hover:shadow-[0_10px_15px_rgba(0,0,0)] transition-all duration-150 hover:bg-red-700">
                     <MdCallEnd size={30}/>
                 </div>
             </div>
