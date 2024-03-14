@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const useStream = () => {
-    const [stream, setStream] = useState<null | MediaStream>(null)
+    const [stream, setStream] = useState<null | MediaStream | number>(null)
     const isStreamSet = useRef(false);
 
     useEffect(
@@ -19,7 +19,7 @@ const useStream = () => {
                     setStream(myStream);
                 }
                 catch (error) {
-                    console.log(error);
+                    setStream(-1);
                 }
             })()
         },

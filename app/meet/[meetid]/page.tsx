@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import usePeer from "@/hook/usePeer";
 import useStream from "@/hook/useStream";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -9,6 +9,8 @@ import axios from "axios";
 import VideoStream from "@/components/videoStreamer";
 import InputHandler from "@/components/inputBox";
 import { type UserStreamData } from "@/interfaces/StreamInterface";
+import { ReactNotifications, Store } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 export default function MeetPage() {
     const params = useParams();
@@ -21,6 +23,21 @@ export default function MeetPage() {
     const [username, setUsername] = useState('');
     const [isUserNameSet, updateIsUserNameSet] = useState(false);
     const receivedUsername = useRef('');
+    const route = useRouter();
+
+    const permissionDeniedNotification = () => Store.addNotification({
+        title : "Error",
+        message : "You can't join without camera and mic permission",
+        type : "danger",
+        insert : "top",
+        container : "bottom-center",
+        animationIn : ["animate__animated", "animate__fadeIn"],
+        animationOut : ["animate__animated", "animate__fadeOut"],
+        dismiss : {
+            duration : 2750,
+            onScreen : true
+        }
+    });
 
     const streamHandler = (stream : MediaStream) => {
         setStreamArray(
@@ -34,7 +51,7 @@ export default function MeetPage() {
 
     useEffect(
         () => {
-            if (!peer || !peerID || !myStream || !isUserNameSet) return;
+            if (!peer || !peerID || !(myStream instanceof MediaStream) || !isUserNameSet) return;
 
             (async () => {
                 await axios.post(
@@ -87,7 +104,14 @@ export default function MeetPage() {
 
     useEffect(
         () => {
-            if (myStream && username) {
+            if (myStream === -1) {
+                permissionDeniedNotification();
+                setTimeout(
+                    () => route.push('/'),
+                    3000
+                );
+            }
+            else if (myStream instanceof MediaStream && username) {
                 setStreamArray(
                     prevState => [...prevState, {
                         stream : myStream,
@@ -102,7 +126,7 @@ export default function MeetPage() {
     );
 
     const userNameHandler = () => {
-        if (username && !isUserNameSet) updateIsUserNameSet(true);
+        if (username && !isUserNameSet && myStream instanceof MediaStream) updateIsUserNameSet(true);
     };
 
     return (
@@ -125,11 +149,13 @@ export default function MeetPage() {
                 />
             </div>
 
-            <div className="m-auto">
-                <button className={`bg-[#a9faa2] p-4 rounded hover:bg-opacity-90 transition-all duration-150 ${username ? "cursor-pointer" : "cursor-not-allowed"}`} onClick={userNameHandler}>
+            <div className="m-auto mb-8">
+                <button className={`bg-[#a9faa2] p-4 rounded hover:bg-opacity-90 transition-all duration-150 ${username && myStream instanceof MediaStream ? "cursor-pointer" : "cursor-not-allowed"}`} onClick={userNameHandler}>
                     Enter the meet
                 </button>
             </div>
+
+            <ReactNotifications/>
         </section> :
 
         <section className="flex flex-wrap gap-2 md:gap-8 justify-center mt-8 mx-4">
