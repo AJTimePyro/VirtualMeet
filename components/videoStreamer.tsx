@@ -15,7 +15,9 @@ export default function VideoStream(
     const videoRef = useRef<null | HTMLVideoElement>(null);
     useEffect(
         () => {
-            videoRef.current!.srcObject = streamData.stream;
+            if (videoRef.current) {
+                videoRef.current.srcObject = streamData.stream;
+            }
         },
         []
     );
@@ -28,7 +30,12 @@ export default function VideoStream(
                 muted={streamData.mute}
                 disablePictureInPicture={true}
                 width={420}
+                height={315}
+                className={`${streamData.videoOff ? "hidden" : "block"}`}
             />
+            {
+                streamData.videoOff && <div className="h-[315px] w-[420px] bg-black"/>
+            }
 
             <span className="text-white text-center md:text-lg select-none">
                 {streamData?.username}

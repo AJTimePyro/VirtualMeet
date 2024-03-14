@@ -115,7 +115,24 @@ export default function MeetPage() {
                         ]
                     )
                 }
-            )
+            );
+
+            pusherClient.bind(
+                "video-toggle",
+                (data : {newState : boolean, requestedStreamID : string}) => {
+                    const { newState, requestedStreamID } = data;
+                    setStreamArray(
+                        (prevState) => [
+                            ...(() => {
+                                prevState.find(
+                                    (value) => value.streamID === requestedStreamID
+                                )!.videoOff = newState;
+                                return prevState;
+                            })()
+                        ]
+                    )
+                }
+            );
     
             return () => {
                 pusherClient.unbind("new-user-joined");
@@ -153,14 +170,32 @@ export default function MeetPage() {
         if (!(myStream instanceof MediaStream)) return;
 
         (async () => await axios.post(
-            "/api/audio-toggle", {
+            "/api/track-toggle", {
                 meetID : meetID,
                 newState : micOn,
-                requestedStreamID : myStream.id
+                requestedStreamID : myStream.id,
+                track : "audio"
             }
         ))();
 
         setMicOn(
+            (prevValue) => !prevValue
+        );
+    }
+
+    const videoToggle = () => {
+        if (!(myStream instanceof MediaStream)) return;
+
+        (async () => await axios.post(
+            "/api/track-toggle", {
+                meetID : meetID,
+                newState : cameraOn,
+                requestedStreamID : myStream.id,
+                track : "video"
+            }
+        ))();
+
+        setCameraOn(
             (prevValue) => !prevValue
         );
     }
@@ -222,11 +257,7 @@ export default function MeetPage() {
                 </div>
                 
                 <div
-                    onClick={
-                        () => setCameraOn(
-                            (prevValue) => !prevValue
-                        )
-                    }
+                    onClick={videoToggle}
                     className="rounded-full bg-white p-3 cursor-pointer text-gray-600">
                     {
                         cameraOn ? <FaVideo size={30}/> : <FaVideoSlash size={30}/>
