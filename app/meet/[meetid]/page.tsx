@@ -92,7 +92,8 @@ export default function MeetPage() {
                     prevState => [...prevState, {
                         stream : myStream,
                         username : username,
-                        streamID : myStream.id
+                        streamID : myStream.id,
+                        mute : true
                     }]
                 );
             }

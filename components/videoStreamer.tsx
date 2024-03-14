@@ -8,8 +8,7 @@ interface VideoStreamProps {
 
 export default function VideoStream(
     {
-        streamData,
-        videoWidth
+        streamData
     } : VideoStreamProps
 ) {
 
@@ -26,7 +25,7 @@ export default function VideoStream(
             <video
                 ref={videoRef}
                 autoPlay={true}
-                muted={true}
+                muted={streamData.mute}
                 disablePictureInPicture={true}
                 width={420}
             />
