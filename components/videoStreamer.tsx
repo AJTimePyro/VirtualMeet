@@ -30,7 +30,7 @@ export default function VideoStream(
                 width={420}
             />
 
-            <span className="text-white text-center md:text-lg">
+            <span className="text-white text-center md:text-lg select-none">
                 {streamData?.username}
             </span>
         </div>
