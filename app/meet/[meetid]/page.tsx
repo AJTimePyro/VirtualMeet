@@ -167,7 +167,7 @@ export default function MeetPage() {
                     3000
                 );
             }
-            else if (myStream instanceof MediaStream && username) {
+            else if (myStream instanceof MediaStream && username && isUserNameSet) {
                 setStreamArray(
                     prevState => [...prevState, {
                         stream : myStream,
